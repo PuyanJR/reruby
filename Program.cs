@@ -58,4 +58,3 @@ partial class Program
         Console.WriteLine("Status: " + response.StatusCode);
     }
 }
-
