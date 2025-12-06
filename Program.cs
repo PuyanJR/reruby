@@ -22,7 +22,8 @@ partial class Program
             if (processes.Length > 0)
             {
                 Console.WriteLine("Roblox started!");
-                break; // Continue your program here
+                // Continue your program here
+                break;
             }
 
             Thread.Sleep(500); // reduce CPU usage
